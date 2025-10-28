@@ -339,7 +339,7 @@ export const translations: Record<string, Translation> = {
     ta: 'கூடுதல் சேர்த்தல்களை விரும்புகிறீர்களா?',
   },
   addonsYes: {
-    en: 'Yes, show add-ons',
+    en: 'Yes, I want',
     zh: '是的，显示加选',
     ms: 'Ya, tunjukkan tambahan',
     ta: 'ஆம், கூடுதல் சேர்த்தல்களை காட்டு',
