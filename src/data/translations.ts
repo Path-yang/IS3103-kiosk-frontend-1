@@ -332,6 +332,24 @@ export const translations: Record<string, Translation> = {
     ms: 'Laraskan Tahap Pedas',
     ta: 'காரத்தன்மையை சரிசெய்க',
   },
+  addonsPrompt: {
+    en: 'Would you like add-ons?',
+    zh: '需要加选配料吗？',
+    ms: 'Mahukan tambahan?',
+    ta: 'கூடுதல் சேர்த்தல்களை விரும்புகிறீர்களா?',
+  },
+  addonsYes: {
+    en: 'Yes, show add-ons',
+    zh: '是的，显示加选',
+    ms: 'Ya, tunjukkan tambahan',
+    ta: 'ஆம், கூடுதல் சேர்த்தல்களை காட்டு',
+  },
+  addonsNo: {
+    en: 'No, thanks',
+    zh: '不用，谢谢',
+    ms: 'Tidak, terima kasih',
+    ta: 'வேண்டாம், நன்றி',
+  },
   mild: {
     en: 'Mild',
     zh: '微辣',

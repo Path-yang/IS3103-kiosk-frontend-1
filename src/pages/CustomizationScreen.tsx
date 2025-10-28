@@ -8,8 +8,41 @@ import { ProgressBar } from '../components/ProgressBar';
 import { SpiceLevel } from '../types';
 
 export const CustomizationScreen: React.FC = () => {
-  const { order, language, setCurrentScreen, setSpiceLevel, toggleAddon, toggleDrink, toggleSide } =
-    useOrder();
+  const {
+    order,
+    language,
+    setCurrentScreen,
+    setSpiceLevel,
+    toggleAddon,
+    toggleDrink,
+    toggleSide,
+  } = useOrder();
+
+  const hasAnySelection =
+    order.addons.length > 0 || order.drinks.length > 0 || order.sides.length > 0;
+  const [showAddons, setShowAddons] = React.useState(hasAnySelection);
+
+  React.useEffect(() => {
+    if (hasAnySelection) {
+      setShowAddons(true);
+    }
+  }, [hasAnySelection]);
+
+  const handleAddonsChoice = (shouldShow: boolean) => {
+    setShowAddons(shouldShow);
+
+    if (!shouldShow) {
+      if (order.addons.length > 0) {
+        order.addons.forEach((addonId) => toggleAddon(addonId));
+      }
+      if (order.drinks.length > 0) {
+        order.drinks.forEach((drinkId) => toggleDrink(drinkId));
+      }
+      if (order.sides.length > 0) {
+        order.sides.forEach((sideId) => toggleSide(sideId));
+      }
+    }
+  };
 
   const selectedSoup = soupBases.find((s) => s.id === order.soupBase);
   const isDryPot = selectedSoup?.isDryPot;
@@ -81,17 +114,48 @@ export const CustomizationScreen: React.FC = () => {
             </section>
           )}
 
-          {/* Extra Toppings */}
-          <section className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
-              {translations.extraToppings[language]}
+          {/* Add-ons Prompt */}
+          <section className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800">
+              {translations.addonsPrompt[language]}
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {sauceAddons.map((addon) => (
-                <button
-                  key={addon.id}
-                  onClick={() => toggleAddon(addon.id)}
-                  className={`
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                onClick={() => handleAddonsChoice(true)}
+                variant="outline"
+                size="md"
+                className={`flex-1 ${
+                  showAddons ? 'bg-primary text-white hover:text-white hover:bg-primary-dark' : ''
+                }`}
+              >
+                {translations.addonsYes[language]}
+              </Button>
+              <Button
+                onClick={() => handleAddonsChoice(false)}
+                variant="outline"
+                size="md"
+                className={`flex-1 ${
+                  !showAddons ? 'bg-primary text-white hover:text-white hover:bg-primary-dark' : ''
+                }`}
+              >
+                {translations.addonsNo[language]}
+              </Button>
+            </div>
+          </section>
+
+          {/* Extra Toppings */}
+          {showAddons && (
+            <>
+              <section className="bg-white rounded-2xl p-8 shadow-lg">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
+                  {translations.extraToppings[language]}
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                  {sauceAddons.map((addon) => (
+                    <button
+                      key={addon.id}
+                      onClick={() => toggleAddon(addon.id)}
+                      className={`
                     p-4 rounded-xl border-3 transition-all duration-200 active:scale-95 min-h-[120px]
                     ${
                       order.addons.includes(addon.id)
@@ -99,33 +163,33 @@ export const CustomizationScreen: React.FC = () => {
                         : 'border-gray-300 bg-white hover:border-primary'
                     }
                   `}
-                >
-                  <img
-                    src={addon.image}
-                    alt={addon.name[language]}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
-                    }}
-                    className="w-full h-20 object-cover rounded-lg mb-2"
-                  />
-                  <div className="text-sm font-semibold">{addon.name[language]}</div>
-                  <div className="text-primary font-bold">${addon.price.toFixed(2)}</div>
-                </button>
-              ))}
-            </div>
-          </section>
+                    >
+                      <img
+                        src={addon.image}
+                        alt={addon.name[language]}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
+                        }}
+                        className="w-full h-20 object-cover rounded-lg mb-2"
+                      />
+                      <div className="text-sm font-semibold">{addon.name[language]}</div>
+                      <div className="text-primary font-bold">${addon.price.toFixed(2)}</div>
+                    </button>
+                  ))}
+                </div>
+              </section>
 
-          {/* Add a Drink */}
-          <section className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
-              {translations.addDrink[language]}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {drinks.map((drink) => (
-                <button
-                  key={drink.id}
-                  onClick={() => toggleDrink(drink.id)}
-                  className={`
+              {/* Add a Drink */}
+              <section className="bg-white rounded-2xl p-8 shadow-lg">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
+                  {translations.addDrink[language]}
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {drinks.map((drink) => (
+                    <button
+                      key={drink.id}
+                      onClick={() => toggleDrink(drink.id)}
+                      className={`
                     p-4 rounded-xl border-3 transition-all duration-200 active:scale-95
                     ${
                       order.drinks.includes(drink.id)
@@ -133,33 +197,33 @@ export const CustomizationScreen: React.FC = () => {
                         : 'border-gray-300 bg-white hover:border-primary'
                     }
                   `}
-                >
-                  <img
-                    src={drink.image}
-                    alt={drink.name[language]}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
-                    }}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <div className="text-base font-semibold">{drink.name[language]}</div>
-                  <div className="text-primary font-bold">${drink.price.toFixed(2)}</div>
-                </button>
-              ))}
-            </div>
-          </section>
+                    >
+                      <img
+                        src={drink.image}
+                        alt={drink.name[language]}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
+                        }}
+                        className="w-full h-32 object-cover rounded-lg mb-2"
+                      />
+                      <div className="text-base font-semibold">{drink.name[language]}</div>
+                      <div className="text-primary font-bold">${drink.price.toFixed(2)}</div>
+                    </button>
+                  ))}
+                </div>
+              </section>
 
-          {/* Add a Side */}
-          <section className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
-              {translations.addSide[language]}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {sides.map((side) => (
-                <button
-                  key={side.id}
-                  onClick={() => toggleSide(side.id)}
-                  className={`
+              {/* Add a Side */}
+              <section className="bg-white rounded-2xl p-8 shadow-lg">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">
+                  {translations.addSide[language]}
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {sides.map((side) => (
+                    <button
+                      key={side.id}
+                      onClick={() => toggleSide(side.id)}
+                      className={`
                     p-4 rounded-xl border-3 transition-all duration-200 active:scale-95
                     ${
                       order.sides.includes(side.id)
@@ -167,21 +231,23 @@ export const CustomizationScreen: React.FC = () => {
                         : 'border-gray-300 bg-white hover:border-primary'
                     }
                   `}
-                >
-                  <img
-                    src={side.image}
-                    alt={side.name[language]}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
-                    }}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <div className="text-base font-semibold">{side.name[language]}</div>
-                  <div className="text-primary font-bold">${side.price.toFixed(2)}</div>
-                </button>
-              ))}
-            </div>
-          </section>
+                    >
+                      <img
+                        src={side.image}
+                        alt={side.name[language]}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/images/placeholder.svg';
+                        }}
+                        className="w-full h-32 object-cover rounded-lg mb-2"
+                      />
+                      <div className="text-base font-semibold">{side.name[language]}</div>
+                      <div className="text-primary font-bold">${side.price.toFixed(2)}</div>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            </>
+          )}
         </div>
 
         {/* Continue Button */}
