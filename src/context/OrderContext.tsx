@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Order, Screen, Language, SpiceLevel, Member } from '../types';
-import { sauceAddons, drinks, sides } from '../data/addons';
-import { soupBases } from '../data/soupBases';
 
 interface OrderContextType {
   order: Order;
