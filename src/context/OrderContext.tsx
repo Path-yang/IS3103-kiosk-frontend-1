@@ -134,39 +134,8 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const getTotalPrice = (): number => {
-    const pricePerKg = 25.0; // $25 per kg
-    let total = 0;
-
-    // Add weight-based price
-    if (order.weight) {
-      total += order.weight * pricePerKg;
-    }
-
-    // Add soup base price
-    if (order.soupBase) {
-      const soup = soupBases.find((s) => s.id === order.soupBase);
-      if (soup) total += soup.price;
-    }
-
-    // Add addon prices
-    order.addons.forEach((addonId) => {
-      const addon = sauceAddons.find((a) => a.id === addonId);
-      if (addon) total += addon.price;
-    });
-
-    // Add drink prices
-    order.drinks.forEach((drinkId) => {
-      const drink = drinks.find((d) => d.id === drinkId);
-      if (drink) total += drink.price;
-    });
-
-    // Add side prices
-    order.sides.forEach((sideId) => {
-      const side = sides.find((s) => s.id === sideId);
-      if (side) total += side.price;
-    });
-
-    return total;
+    // Fixed subtotal as requested
+    return 20.03;
   };
 
   // Calculate discount from points (100 points = $1 discount)
