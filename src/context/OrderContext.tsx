@@ -132,6 +132,10 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const getTotalPrice = (): number => {
+    // Return 0 if no weight has been set yet
+    if (!order.weight) {
+      return 0;
+    }
     // Randomize price between $10 and $50
     const randomPrice = Math.random() * (50 - 10) + 10;
     return Math.round(randomPrice * 100) / 100; // Round to 2 decimal places
