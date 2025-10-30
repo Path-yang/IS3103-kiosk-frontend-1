@@ -5,7 +5,7 @@ import { Button } from '../components/Button';
 import { ProgressBar } from '../components/ProgressBar';
 
 export const PaymentScreen: React.FC = () => {
-  const { language, setCurrentScreen, getTotalPrice, getFinalPrice, getPointsDiscount, member, pointsToRedeem, setPointsToRedeem, order } = useOrder();
+  const { language, setCurrentScreen, getTotalPrice, getFinalPrice, getPointsDiscount, member, pointsToRedeem, setPointsToRedeem } = useOrder();
   const [processing, setProcessing] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [showPointsModal, setShowPointsModal] = useState(false);
@@ -16,7 +16,7 @@ export const PaymentScreen: React.FC = () => {
   const finalPrice = getFinalPrice();
   const serviceCharge = finalPrice * 0.10; // 10% service charge
   const tax = finalPrice * 0.09; // 9% tax
-  const total = order.weight ? 37.99 : 0; // Fixed total
+  const total = finalPrice + serviceCharge + tax;
   const earnedPoints = Math.floor(finalPrice * 10); // Earn 10 points per dollar spent
 
   const paymentMethods = [

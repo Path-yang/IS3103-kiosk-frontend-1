@@ -3,11 +3,11 @@ import { useOrder } from '../context/OrderContext';
 import { translations } from '../data/translations';
 
 export const PriceSidebar: React.FC = () => {
-  const { language, getTotalPrice, order } = useOrder();
+  const { language, getTotalPrice } = useOrder();
   const subtotal = getTotalPrice();
   const serviceCharge = subtotal * 0.10; // 10% service charge
   const tax = subtotal * 0.09; // 9% tax
-  const total = order.weight ? 37.99 : 0; // Fixed total
+  const total = subtotal + serviceCharge + tax;
 
   return (
     <aside

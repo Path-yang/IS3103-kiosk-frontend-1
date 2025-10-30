@@ -15,7 +15,7 @@ export const ReviewScreen: React.FC = () => {
   const subtotal = getTotalPrice();
   const serviceCharge = subtotal * 0.10; // 10% service charge
   const tax = subtotal * 0.09; // 9% tax
-  const total = order.weight ? 37.99 : 0; // Fixed total
+  const total = subtotal + serviceCharge + tax;
 
   const handleConfirmAndPay = () => {
     setCurrentScreen('payment');
