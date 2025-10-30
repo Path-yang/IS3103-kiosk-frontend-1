@@ -132,8 +132,9 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   const getTotalPrice = (): number => {
-    // Fixed subtotal as requested
-    return 20.03;
+    // Randomize price between $10 and $50
+    const randomPrice = Math.random() * (50 - 10) + 10;
+    return Math.round(randomPrice * 100) / 100; // Round to 2 decimal places
   };
 
   // Calculate discount from points (100 points = $1 discount)
