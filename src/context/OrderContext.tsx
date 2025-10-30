@@ -136,7 +136,7 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (!order.weight) {
       return 0;
     }
-    // Fixed subtotal as requested
+    // Fixed subtotal
     return 31.92;
   };
 
