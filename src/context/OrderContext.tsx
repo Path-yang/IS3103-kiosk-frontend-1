@@ -136,8 +136,8 @@ export const OrderProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     if (!order.weight) {
       return 0;
     }
-    // Fixed subtotal (calculated to make total = $37.99)
-    return 31.93;
+    // Fixed subtotal
+    return 31.92;
   };
 
   // Calculate discount from points (100 points = $1 discount)
